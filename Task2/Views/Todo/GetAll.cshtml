@@ -1,0 +1,485 @@
+@model IEnumerable<Task2.Models.Todo>
+
+@{
+ViewData["Title"] = "قائمة المهام";
+var taskCount = Model?.Count() ?? 0;
+}
+
+<style>
+    .header-section {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .header-title {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin: 0;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-title i {
+        font-size: 2.5rem;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .header-title h2 {
+        margin: 0;
+        color: #1e293b;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .task-count {
+        background: linear-gradient(135deg, #10b981, #059669);
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-create {
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 50px;
+        color: white;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-create:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6);
+        color: white;
+    }
+
+    .table-container {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 2rem;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        overflow: hidden;
+    }
+
+    .custom-table {
+        margin: 0;
+        border: none;
+    }
+
+    .custom-table thead {
+        background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    .custom-table thead th {
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        border: none;
+        padding: 1rem;
+    }
+
+    .custom-table tbody tr {
+        transition: all 0.3s ease;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .custom-table tbody tr:hover {
+        background-color: #f0fdf4;
+        transform: scale(1.01);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .custom-table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+        border: none;
+    }
+
+    .status-badge {
+        padding: 0.4rem 1rem;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-block;
+    }
+
+    .status-completed {
+        background: #d1fae5;
+        color: #065f46;
+    }
+
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+
+    .status-inprogress {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+
+    .file-link {
+        color: #10b981;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .file-link:hover {
+        color: #059669;
+        transform: translateX(-3px);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-action {
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        border: none;
+        font-size: 0.85rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+    }
+
+    .btn-edit {
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white;
+    }
+
+    .btn-edit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        color: white;
+    }
+
+    .btn-delete {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        color: white;
+    }
+
+    .btn-delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+        color: white;
+    }
+
+    .deadline-text {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 3rem;
+        color: #64748b;
+    }
+
+    .empty-state i {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+    }
+
+    .empty-state h4 {
+        color: #475569;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Toast Notifications */
+    .toast-container {
+        position: fixed;
+        top: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 9999;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        min-width: 400px;
+    }
+
+    .toast {
+        background: white;
+        border-radius: 15px;
+        padding: 1.2rem 1.5rem;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        animation: slideInDown 0.5s ease-out;
+        border-right: 5px solid;
+    }
+
+    .toast.success {
+        border-right-color: #10b981;
+    }
+
+    .toast.error {
+        border-right-color: #ef4444;
+    }
+
+    .toast-icon {
+        font-size: 2rem;
+        flex-shrink: 0;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .toast.success .toast-icon {
+        background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+        color: #065f46;
+    }
+
+    .toast.error .toast-icon {
+        background: linear-gradient(135deg, #fee2e2, #fecaca);
+        color: #991b1b;
+    }
+
+    .toast-content {
+        flex: 1;
+    }
+
+    .toast-title {
+        font-weight: 700;
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
+        color: #1e293b;
+    }
+
+    .toast-message {
+        color: #64748b;
+        font-size: 0.95rem;
+        line-height: 1.4;
+    }
+
+    .toast-close {
+        background: none;
+        border: none;
+        font-size: 1.3rem;
+        color: #94a3b8;
+        cursor: pointer;
+        padding: 0;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s;
+    }
+
+    .toast-close:hover {
+        background: #f1f5f9;
+        color: #64748b;
+        transform: rotate(90deg);
+    }
+
+    @@keyframes slideInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-100px) scale(0.8);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    @@keyframes slideOutUp {
+        from {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: translateY(-100px) scale(0.8);
+        }
+    }
+
+    .toast.hiding {
+        animation: slideOutUp 0.5s ease-out forwards;
+    }
+
+    @@media (max-width: 768px) {
+        .header-section {
+            text-align: center;
+            flex-direction: column;
+        }
+
+        .header-title {
+            align-items: center;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .custom-table {
+            font-size: 0.85rem;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .toast-container {
+            min-width: 90%;
+            left: 5%;
+            transform: none;
+        }
+        .simple-toast {
+            background: #333;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+            min-width: 200px;
+            font-size: 14px;
+            transition: opacity 0.5s;
+        }
+
+        .simple-toast.success {
+            background: #2ecc71;
+        }
+
+        .simple-toast.error {
+            background: #e74c3c;
+        }
+
+    }
+</style>
+
+
+
+
+<div class="header-section">
+    <div class="header-title">
+        <h2>
+            <i class="fas fa-tasks"></i>
+            قائمة المهام لـ @(Context.Request.Cookies["name"] ?? "مستخدم")
+        </h2>
+        <span class="task-count">
+            <i class="fas fa-list-ol"></i>
+            إجمالي المهام: @taskCount
+        </span>
+    </div>
+    <a asp-controller="Todo" asp-action="Creat_view" class="btn-create">
+        <i class="fas fa-plus-circle"></i> إنشاء مهمة جديدة
+    </a>
+</div>
+
+<div class="table-container">
+    @if (Model != null && Model.Any())
+    {
+    <div class="table-responsive">
+        <table class="table custom-table">
+            <thead>
+            <tr>
+                <th><i class="fas fa-heading"></i> العنوان</th>
+                <th><i class="fas fa-align-left"></i> الوصف</th>
+                <th><i class="fas fa-file"></i> الملف</th>
+                <th><i class="fas fa-info-circle"></i> الحالة</th>
+                <th><i class="fas fa-calendar-alt"></i> الموعد النهائي</th>
+                <th><i class="fas fa-cog"></i> الإجراءات</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td><strong>@item.Title</strong></td>
+                <td>@item.Description</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.File))
+                    {
+                    <a href="/Files/@item.File" download class="file-link">
+                        <i class="fas fa-download"></i> تحميل
+                    </a>
+                    }
+                    else
+                    {
+                    <span style="color: #94a3b8;">لا يوجد</span>
+                    }
+                </td>
+                <td>
+                                <span class="status-badge status-@item.Status.ToLower()">
+                                    @item.Status
+                                </span>
+                </td>
+                <td>
+                                <span class="deadline-text">
+                                    <i class="far fa-clock"></i>
+                                    @item.DeadLine.ToString("dd/MM/yyyy HH:mm")
+                                </span>
+                </td>
+                <td>
+                    <div class="action-buttons">
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn-action btn-edit">
+                            <i class="fas fa-edit"></i> تعديل
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn-action btn-delete">
+                            <i class="fas fa-trash-alt"></i> حذف
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+    }
+    else
+    {
+    <div class="empty-state">
+        <i class="fas fa-inbox"></i>
+        <h4>لا توجد مهام حالياً</h4>
+        <p>ابدأ بإنشاء مهمة جديدة!</p>
+    </div>
+    }
+</div>
+

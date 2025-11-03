@@ -1,0 +1,199 @@
+@* *@
+@* @{ *@
+@*     ViewData["Title"] = "تسجيل مستخدم جديد"; *@
+@* } *@
+
+<style>
+    .register-container {
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 2rem 0;
+    }
+
+    .register-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .register-header i {
+        font-size: 4rem;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+    }
+
+    .register-header h2 {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .register-header p {
+        color: #64748b;
+        font-size: 1.1rem;
+    }
+
+    .register-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group-custom {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label-custom {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+    }
+
+    .form-label-custom i {
+        color: #667eea;
+        font-size: 1.1rem;
+    }
+
+    .input-group-custom {
+        position: relative;
+    }
+
+    .input-icon {
+        position: absolute;
+        left: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94a3b8;
+        font-size: 1.1rem;
+        z-index: 1;
+    }
+
+    .form-control-custom {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 0.75rem 1rem 0.75rem 3rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        width: 100%;
+    }
+
+    .form-control-custom:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        outline: none;
+    }
+
+    .form-control-custom:focus + .input-icon {
+        color: #667eea;
+    }
+
+    .btn-register {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 0.875rem;
+        border-radius: 12px;
+        color: white;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        width: 100%;
+        margin-top: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        color: white;
+    }
+
+    .text-danger {
+        color: #ef4444;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    .info-box {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(139, 92, 246, 0.1));
+        border-right: 4px solid #667eea;
+        padding: 1rem;
+        border-radius: 12px;
+        margin-bottom: 1.5rem;
+    }
+
+    .info-box i {
+        color: #667eea;
+        margin-left: 0.5rem;
+    }
+
+    .info-box p {
+        margin: 0;
+        color: #475569;
+        font-size: 0.95rem;
+    }
+
+    @@media (max-width: 768px) {
+        .register-card {
+            padding: 1.5rem;
+        }
+
+        .register-header h2 {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<div class="register-container">
+    <div class="register-header">
+        <i class="fas fa-user-plus"></i>
+        <h2>تسجيل مستخدم جديد</h2>
+        <p>أنشئ حسابك وابدأ في إدارة مهامك</p>
+    </div>
+
+    <div class="register-card">
+        <div class="info-box">
+            <i class="fas fa-info-circle"></i>
+            <p>قم بإدخال اسم المستخدم الخاص بك للمتابعة</p>
+        </div>
+
+        <form asp-controller="Todo" asp-action="User" method="post">
+            <div class="form-group-custom">
+                <label class="form-label-custom">
+                    <i class="fas fa-user"></i>
+                    اسم المستخدم
+                </label>
+                <div class="input-group-custom">
+                    <input class="form-control-custom" type="text" name="name" placeholder="أدخل اسم المستخدم" required />
+
+                    <i class="fas fa-user input-icon"></i>
+                </div>
+                @* <span asp-validation-for="Username" class="text-danger"></span> *@
+            </div>
+            
+            <button type="submit" class="btn-register">
+                <i class="fas fa-check-circle"></i>
+                تسجيل الدخول
+            </button>
+        </form>
+    </div>
+</div>
+
+@* @section Scripts { *@
+@*     <partial name="_ValidationScriptsPartial" /> *@
+@* } *@

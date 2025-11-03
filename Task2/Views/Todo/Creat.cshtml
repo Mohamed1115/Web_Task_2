@@ -1,0 +1,370 @@
+@model Task2.Models.Todo
+
+@{
+ViewData["Title"] = "إنشاء مهمة جديدة";
+}
+
+<style>
+    .create-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .page-header h2 {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 700;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .page-header p {
+        color: #64748b;
+        font-size: 1.1rem;
+    }
+
+    .form-card {
+        background: white;
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group-custom {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-label-custom {
+        font-weight: 600;
+        color: #1e293b;
+        margin-bottom: 0.5rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1rem;
+    }
+
+    .form-label-custom i {
+        color: #667eea;
+        font-size: 1.1rem;
+    }
+
+    .optional-badge {
+        font-size: 0.75rem;
+        background: #e2e8f0;
+        color: #64748b;
+        padding: 0.2rem 0.6rem;
+        border-radius: 20px;
+        font-weight: 500;
+    }
+
+    .form-control-custom {
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    .form-control-custom:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        outline: none;
+    }
+
+    textarea.form-control-custom {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .file-input-wrapper {
+        position: relative;
+        overflow: hidden;
+        display: inline-block;
+        width: 100%;
+    }
+
+    .file-input-custom {
+        border: 2px dashed #cbd5e1;
+        border-radius: 12px;
+        padding: 2rem;
+        text-align: center;
+        background: #f8fafc;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .file-input-custom:hover {
+        border-color: #667eea;
+        background: #f1f5f9;
+    }
+
+    .file-input-custom i {
+        font-size: 2.5rem;
+        color: #667eea;
+        margin-bottom: 0.5rem;
+    }
+
+    .file-input-custom p {
+        margin: 0;
+        color: #64748b;
+        font-weight: 500;
+    }
+
+    .file-input-custom input[type="file"] {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .status-select {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    .status-option {
+        position: relative;
+    }
+
+    .status-option input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .status-option label {
+        display: block;
+        padding: 1rem;
+        border: 2px solid #e2e8f0;
+        border-radius: 12px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+
+    .status-option input[type="radio"]:checked + label {
+        border-color: #667eea;
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(139, 92, 246, 0.1));
+        color: #667eea;
+    }
+
+    .status-option label:hover {
+        border-color: #667eea;
+        transform: translateY(-2px);
+    }
+
+    .button-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        justify-content: center;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        padding: 0.875rem 2.5rem;
+        border-radius: 50px;
+        color: white;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-submit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        color: white;
+    }
+
+    .btn-cancel {
+        background: transparent;
+        border: 2px solid #94a3b8;
+        padding: 0.875rem 2.5rem;
+        border-radius: 50px;
+        color: #64748b;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-cancel:hover {
+        border-color: #ef4444;
+        color: #ef4444;
+        transform: translateY(-2px);
+    }
+
+    .text-danger {
+        color: #ef4444;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    @@media (max-width: 768px) {
+        .form-card {
+            padding: 1.5rem;
+        }
+
+        .page-header h2 {
+            font-size: 2rem;
+        }
+
+        .button-group {
+            flex-direction: column;
+        }
+
+        .btn-submit,
+        .btn-cancel {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .status-select {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="create-container">
+    <div class="page-header">
+        <h2>إنشاء مهمة لـ @(Context.Request.Cookies["name"] ?? "مستخدم")</h2>
+        <p>أضف مهمة جديدة إلى قائمتك وابدأ في تنظيم وقتك</p>
+    </div>
+
+
+    <div class="form-card">
+        <form asp-action="Creat" method="post" enctype="multipart/form-data">
+
+            <!-- Title -->
+            <div class="form-group-custom">
+                <label asp-for="Title" class="form-label-custom">
+                    <i class="fas fa-heading"></i>
+                    العنوان
+                </label>
+                <input asp-for="Title" class="form-control form-control-custom" placeholder="أدخل عنوان المهمة" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <!-- Description -->
+            <div class="form-group-custom">
+                <label asp-for="Description" class="form-label-custom">
+                    <i class="fas fa-align-left"></i>
+                    الوصف
+                </label>
+                <textarea asp-for="Description" class="form-control form-control-custom" placeholder="أضف وصفاً تفصيلياً للمهمة"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <!-- File -->
+            <div class="form-group-custom">
+                <label class="form-label-custom">
+                    <i class="fas fa-paperclip"></i>
+                    المرفق
+                    <span class="optional-badge">اختياري</span>
+                </label>
+
+                <!-- مربع الرفع -->
+                <div class="file-input-custom" onclick="document.getElementById('fileInput').click()" style="position: relative;">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>اسحب الملف هنا أو انقر للتحميل</p>
+                </div>
+
+                <!-- الملف الحقيقي (مخفي) -->
+                <input id="fileInput" name="File" type="file" style="display:none;" onchange="updateFileName(this)" />
+
+                <span id="file-name" style="display: block; margin-top: 0.5rem; color: #667eea; font-weight: 500;"></span>
+            </div>
+
+
+            <!-- Status -->
+            <div class="form-group-custom">
+                <label class="form-label-custom">
+                    <i class="fas fa-info-circle"></i>
+                    الحالة
+                </label>
+                <div class="status-select">
+                    <div class="status-option">
+                        <input type="radio" name="Status" value="Pending" id="status-pending" checked />
+                        <label for="status-pending">
+                            <i class="fas fa-clock"></i> قيد الانتظار
+                        </label>
+                    </div>
+                    <div class="status-option">
+                        <input type="radio" name="Status" value="InProgress" id="status-inprogress" />
+                        <label for="status-inprogress">
+                            <i class="fas fa-spinner"></i> قيد التنفيذ
+                        </label>
+                    </div>
+                    <div class="status-option">
+                        <input type="radio" name="Status" value="Completed" id="status-completed" />
+                        <label for="status-completed">
+                            <i class="fas fa-check-circle"></i> مكتملة
+                        </label>
+                    </div>
+                </div>
+                <span asp-validation-for="Status" class="text-danger"></span>
+            </div>
+
+            <!-- Deadline -->
+            <div class="form-group-custom">
+                <label asp-for="DeadLine" class="form-label-custom">
+                    <i class="fas fa-calendar-alt"></i>
+                    الموعد النهائي
+                </label>
+                <input asp-for="DeadLine" type="datetime-local" class="form-control form-control-custom" />
+                <span asp-validation-for="DeadLine" class="text-danger"></span>
+            </div>
+
+            <!-- Buttons -->
+            <div class="button-group">
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-check"></i>
+                    إنشاء المهمة
+                </button>
+                <a asp-action="GetAll" class="btn-cancel">
+                    <i class="fas fa-times"></i>
+                    إلغاء
+                </a>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<script>
+    function updateFileName(input) {
+        const fileNameSpan = document.getElementById('file-name');
+        if (input.files && input.files[0]) {
+            fileNameSpan.textContent = '✓ ' + input.files[0].name;
+            fileNameSpan.style.display = 'block';
+        } else {
+            fileNameSpan.style.display = 'none';
+        }
+    }
+</script>
+
+@section Scripts {
+<partial name="_ValidationScriptsPartial" />
+}
