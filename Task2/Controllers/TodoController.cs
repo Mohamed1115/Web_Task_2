@@ -193,58 +193,7 @@ public class TodoController:Controller
                 return View(todo);
             }
         }
-        //
-        // // GET: Todo/GetAll
-        // public IActionResult GetAll()
-        // {
-        //     var todos = _context.Todos.ToList();
-        //     return View(todos);
-        // }
-        //
-        // // GET: Todo/Creat_view
-        // public IActionResult Creat_view()
-        // {
-        //     return View();
-        // }
-        //
-        // // POST: Todo/Creat
-        // [HttpPost]
-        // [ValidateAntiForgeryToken]
-        // public IActionResult Creat(Todo todo, IFormFile? FileUpload)
-        // {
-        //     try
-        //     {
-        //         if (ModelState.IsValid)
-        //         {
-        //             // معالجة الملف
-        //             if (FileUpload != null && FileUpload.Length > 0)
-        //             {
-        //                 string fileName = Guid.NewGuid().ToString() + Path.GetExtension(FileUpload.FileName);
-        //                 string filePath = Path.Combine(_webHostEnvironment.WebRootPath, "Files", fileName);
-        //
-        //                 using (var stream = new FileStream(filePath, FileMode.Create))
-        //                 {
-        //                     FileUpload.CopyTo(stream);
-        //                 }
-        //
-        //                 todo.File = fileName;
-        //             }
-        //
-        //             _context.Todos.Add(todo);
-        //             _context.SaveChanges();
-        //
-        //             TempData["SuccessMessage"] = "تم إنشاء المهمة بنجاح";
-        //             return RedirectToAction("GetAll");
-        //         }
-        //
-        //         return View("Creat_view", todo);
-        //     }
-        //     catch
-        //     {
-        //         TempData["ErrorMessage"] = "حدث خطأ أثناء إنشاء المهمة";
-        //         return View("Creat_view", todo);
-        //     }
-        // }
+       
     
     
     
